@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 # Resolve current script dir
 cd `dirname $0` && DIR=$(pwd) && cd - > /dev/null
+
+# Data dir
+export SAVEDIR="/srv/backup"
+
 # Mysql settings
 export DB_HOST="127.0.0.1";
 export DB_USER="root";
