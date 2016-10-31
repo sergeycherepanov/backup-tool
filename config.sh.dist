@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+# Resolve current script dir
+cd `dirname $0` && DIR=$(pwd) && cd - > /dev/null
+# Mysql settings
+export DB_HOST="127.0.0.1";
+export DB_USER="root";
+export DB_PASS="";
+export DB_NAME="test";
+
+# Cloud Storage Provider Script, available values "s3.sh" (Amazon S3) or "b2.sh" (Backblaze B2)
+export STORAGE_PROVIDER="b2"
+export STORAGE_CMD=${DIR}/storage/${STORAGE_PROVIDER}.sh
+
+
+# Backblaze setting
+export BACKBLAZE_ACCOUNT_ID=
+export BACKBLAZE_APP_KEY=
+export BACKBLAZE_BUCKET=
+
+# S3 Settings
+export S3_ACCESS_KEY=
+export S3_SECRET_KEY=
+export S3_REGION=eu-central-1
+export S3_BUCKET=

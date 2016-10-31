@@ -9,7 +9,7 @@ cd `dirname $0` && DIR=$(pwd) && cd - > /dev/null
 source ${DIR}/config.sh
 
 TIMESTAMP=$(date +%Y%m%d%H%I%S)
-PREFIX="db"
+PREFIX="fs"
 SAVEDIR=${SAVEDIR-'/srv/backup'}/${PREFIX}
 
 mkdir -p ${SAVEDIR}
@@ -27,26 +27,18 @@ error () {
 ps aux | grep -v 'grep' | grep $0 | grep -v $$ && error "Already running!" && exit 1
 
 trace "------------------------------------"
-trace "Mysqldump started, destination file: ${SAVEDIR}/${TIMESTAMP}-db.sql"
-
-(MYSQL_PWD=${DB_PASS} mysqldump --single-transaction -h${DB_HOST} -u${DB_USER} ${DB_NAME} > ${SAVEDIR}/${TIMESTAMP}-db.sql) || {
-    error "Can't create dump!"
+trace "Create tar archive"
+SAVED_TAR=$(SAVEDIR=${SAVEDIR} INTAR=${DIR}/list-include.txt EXTAR=${DIR}/list-exclude.txt ${DIR}/tar-increment.sh) || {
+  error "Can't tar!"
 }
 
-trace "Mysqldump complete, file size: " $(du -sh ${SAVEDIR}/${TIMESTAMP}-db.sql)
-trace "------------------------------------"
-trace "Compressing of dump started, destination file: ${SAVEDIR}/${TIMESTAMP}-db.sql"
-
-gzip -2f ${SAVEDIR}/${TIMESTAMP}-db.sql || {
-    error "Can't compress dump!"
-}
-trace "Compressing complete, file size: " $(du -sh ${SAVEDIR}/${TIMESTAMP}-db.sql.gz)
+trace "Tar completed, file size: " $(du -sh ${SAVED_TAR})
 trace "------------------------------------"
 
 trace "Uploading to storage ($STORAGE_PROVIDER)"
 
-${STORAGE_CMD} cp ${SAVEDIR}/${TIMESTAMP}-db.sql.gz ${PREFIX}/${TIMESTAMP}-db.sql.gz || {
-    error "Can't upload db!"
+${STORAGE_CMD} cp ${SAVED_TAR} ${PREFIX}/$(basename ${SAVED_TAR}) || {
+    error "Can't upload fs!"
 }
 
 trace "Uploading to storage complete"
@@ -73,7 +65,7 @@ done;
 trace "------------------------------------"
 
 trace "Cleanup"
-rm ${SAVEDIR}/${TIMESTAMP}-db.sql.gz
+rm ${SAVED_TAR}
 
 trace "------------------------------------"
 trace "Complete"
