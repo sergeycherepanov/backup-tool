@@ -4,6 +4,8 @@
   exit 1
 }
 
+PIDFILE=/tmp/backup-fs.pid
+
 # Resolve current script dir
 cd `dirname $0` && DIR=$(pwd) && cd - > /dev/null
 source ${DIR}/config.sh
@@ -24,7 +26,9 @@ error () {
 }
 
 # Check is already running
-ps aux | grep -v 'grep' | grep $0 | grep -v $$ && error "Already running!" && exit 1
+[[ -f ${PIDFILE} ]] && ps aux | grep $(cat ${PIDFILE}) && error "Already running!"
+
+echo $$ > ${PIDFILE}
 
 trace "------------------------------------"
 trace "Mysqldump started, destination file: ${SAVEDIR}/${TIMESTAMP}-db.sql"
