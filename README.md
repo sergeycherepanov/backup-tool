@@ -30,5 +30,5 @@ git clone https://github.com/SergeyCherepanov/backup-tool.git /opt/backup-tool
 Ddd cron job:
 
 ```
-0 0  * * * HOME=/root bash -c "/opt/backup-tool/backup-db.sh >> /srv/backup/backup-db.cron.log; /opt/backup-tool/backup-fs.sh >> /srv/backup/backup-fs.cron.log"
+0 0  * * * HOME=/root bash -c "/opt/backup-tool/backup-db.sh 2>&1 >> /srv/backup/backup-db.cron.log; /opt/backup-tool/backup-fs.sh 2>&1 >> /srv/backup/backup-fs.cron.log"
 ```
