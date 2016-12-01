@@ -1,18 +1,19 @@
 ## Requirements
 
 ```
-sudo apt-get install python-openssl
-sudo pip install requests[security]
+$ sudo apt-get update
+$ sudo apt-get install python-openssl python-dev libxml2-dev libxslt-dev
+$ sudo pip install requests[security]
 ```
 
 If you want to use Amazon S3  
 ```
-sudo pip install s3cmd
+$ sudo pip install s3cmd
 ```
 
 If you want to use Backblaze B2  
 ```
-sudo pip install b2
+$ sudo pip install b2
 ```
 
 ## Usage
@@ -20,7 +21,7 @@ sudo pip install b2
 Clone the repo:
 
 ```
-git clone https://github.com/SergeyCherepanov/backup-tool.git /opt/backup-tool
+$ git clone https://github.com/SergeyCherepanov/backup-tool.git /opt/backup-tool
 ```
 
 * rename config.sh.dist to config.sh and update credentials  
