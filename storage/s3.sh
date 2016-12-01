@@ -18,21 +18,21 @@ S3CFG=$(echo "$S3CFG" | sed -e "s/bucket_location =.*/bucket_location = ${S3_REG
 case $1 in
   "ls")
     PREFIX="s3://${S3_BUCKET}/";
-    s3cmd -c <(echo ${S3CFG}) ls -l ${PREFIX}$2 | awk '{ if ($6) { path = substr($6, '${#PREFIX}'); print $1 " " $2 " " $3 " " path " " $4 } else { path = substr($2, '${#PREFIX}'); print "- - " $1 " " path " " $4 }}'
+    s3cmd -c <(echo ${S3CFG}) ls -l ${PREFIX}$2 | awk '{ if ($6) { path = substr($6, '${#PREFIX}'); print $1 " " $2 " " $3 " " path " " $4 } else { path = substr($2, '${#PREFIX}'); print "- - " $1 " " path " " $4 }}' || exit 1
     exit 0
   ;;
   "cp")
     if [[ -z $2 ]] || [[ -z $3 ]]; then
       echo "Missing argument "
     fi
-    s3cmd -c <(echo ${S3CFG}) put $2 s3://${S3_BUCKET}/$3
+    s3cmd -c <(echo ${S3CFG}) put $2 s3://${S3_BUCKET}/$3 > /dev/null || exit 1
     exit 0
   ;;
   "del")
     if [[ -z $2 ]] || [[ -z $3 ]]; then
       echo "Missing argument "
     fi
-    s3cmd -c <(echo ${S3CFG}) del s3://${S3_BUCKET}/$2
+    s3cmd -c <(echo ${S3CFG}) del s3://${S3_BUCKET}/$2 > /dev/null || exit 1
     exit 0
   ;;
 esac
