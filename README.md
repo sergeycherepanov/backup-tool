@@ -27,7 +27,7 @@ git clone https://github.com/SergeyCherepanov/backup-tool.git /opt/backup-tool
 * rename list-include.txt.dist to list-include.txt and update path  
 * rename list-exclude.txt.dist to list-exclude.txt and update path  
 
-Ddd cron job:
+Add cron job:
 
 ```
 0 0  * * * HOME=/root bash -c "/opt/backup-tool/backup-db.sh 2>&1 >> /srv/backup/backup-db.cron.log; /opt/backup-tool/backup-fs.sh 2>&1 >> /srv/backup/backup-fs.cron.log"
