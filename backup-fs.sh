@@ -26,7 +26,7 @@ error () {
 }
 
 # Check is already running
-[[ -f ${PIDFILE} ]] && ps aux | grep -v grep | grep $(cat ${PIDFILE}) && error "Already running!"
+[[ -f ${PIDFILE} ]] && ps aux | grep -v grep | awk '{print $5}' | grep '^'$(cat ${PIDFILE})'$' && error "Already running!"
 
 echo $$ > ${PIDFILE}
 
